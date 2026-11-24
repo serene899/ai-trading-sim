@@ -39,6 +39,15 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    // 单文件打包：全部 JS 合成一个文件。2026-11-25 真机（iOS 27.3 beta）出现
+    // 「顶栏正常、页面主体空白」——分开的路由懒加载 chunk 在其设备上未能加载，
+    // 而主包本身正常。合成单文件后没有独立 chunk 可丢，规避该类问题。
+    rollupOptions: {
+      output: { inlineDynamicImports: true },
+    },
+    chunkSizeWarningLimit: 4096,
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

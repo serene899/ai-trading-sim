@@ -358,10 +358,48 @@ html.dark {
   }
 }
 
+/* 手机窄屏：顶栏改两行——品牌+状态一行，导航独占一行，文字不挤压换行 */
+@media (max-width: 640px) {
+  .topbar {
+    height: auto;
+    flex-wrap: wrap;
+    padding: 10px 14px 6px;
+    gap: 4px 12px;
+
+    .brand {
+      white-space: nowrap;
+      flex-shrink: 0;
+      font-size: 14px;
+    }
+    .status {
+      white-space: nowrap;
+      flex-shrink: 0;
+      font-size: 11px;
+    }
+    .spacer { flex: 1; }
+    .nav {
+      order: 3;
+      width: 100%;
+      overflow-x: auto;
+
+      a {
+        white-space: nowrap;
+        padding: 6px 10px;
+      }
+    }
+  }
+}
+
 .page {
   padding: 28px 24px 60px;
   max-width: 1440px;
   margin: 0 auto;
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 18px 14px 48px;
+  }
 }
 
 h2.section-title {

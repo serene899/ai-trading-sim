@@ -18,7 +18,7 @@ export const SLIPPAGE_PCT = 0.0005
 /** 可调参数（默认值与服务器版 config 一致；测试时可临时改，如关掉滑点专心核对手续费数学） */
 export const engineConfig = { feeRate: FEE_RATE, slippagePct: SLIPPAGE_PCT }
 export const DEFAULT_INITIAL_CAPITAL = 10000
-export const APP_VERSION = '2.0.0'
+export const APP_VERSION = '2.0.1'
 
 export class EngineError extends Error {}
 
