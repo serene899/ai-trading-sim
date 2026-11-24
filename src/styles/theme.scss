@@ -72,6 +72,7 @@ body,
     fixed;
   color: var(--text-main);
   font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
   font-size: 14px;
   letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
@@ -227,7 +228,8 @@ html.dark {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   @media (max-width: 600px) {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
   }
 }
 
@@ -289,7 +291,9 @@ html.dark {
 
 /* ---------- 顶栏 ---------- */
 .topbar {
-  height: 52px;
+  /* 顶部安全区：主屏幕模式下状态栏是透的，顶栏要先让出刘海/时钟的高度，不然第一行点不到 */
+  height: calc(52px + env(safe-area-inset-top, 0px));
+  padding-top: env(safe-area-inset-top, 0px);
   background: var(--bg-overlay);
   backdrop-filter: saturate(180%) blur(24px);
   -webkit-backdrop-filter: saturate(180%) blur(24px);
@@ -310,30 +314,6 @@ html.dark {
     display: flex;
     align-items: center;
     gap: 8px;
-  }
-  .nav {
-    display: flex;
-    gap: 2px;
-
-    a {
-      padding: 6px 14px;
-      border-radius: 8px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: -0.01em;
-      transition: all 0.15s ease;
-
-      &.router-link-active {
-        background: rgba(255, 255, 255, 0.08);
-        color: var(--text-main);
-      }
-      &:hover {
-        background: rgba(255, 255, 255, 0.04);
-        color: var(--text-main);
-      }
-    }
   }
   .spacer { flex: 1; }
   .status {
@@ -358,13 +338,61 @@ html.dark {
   }
 }
 
-/* 手机窄屏：顶栏改两行——品牌+状态一行，导航独占一行，文字不挤压换行 */
+/* ---------- 底部导航（与阅迹/人生K线图同规矩：固定底栏 + 安全区） ---------- */
+.tabbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  display: flex;
+  background: var(--bg-overlay);
+  backdrop-filter: saturate(180%) blur(24px);
+  -webkit-backdrop-filter: saturate(180%) blur(24px);
+  border-top: 1px solid var(--border);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+
+  a {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 8px 4px 7px;
+    color: var(--text-sub);
+    text-decoration: none;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    -webkit-tap-highlight-color: transparent;
+
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+    &.router-link-active {
+      color: var(--accent);
+    }
+    &:active {
+      color: var(--text-main);
+    }
+  }
+}
+
+.page {
+  padding: 28px 24px calc(92px + env(safe-area-inset-bottom, 0px));
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
 @media (max-width: 640px) {
+  .page {
+    padding: 18px 14px calc(92px + env(safe-area-inset-bottom, 0px));
+  }
   .topbar {
-    height: auto;
-    flex-wrap: wrap;
-    padding: 10px 14px 6px;
-    gap: 4px 12px;
+    padding-left: 16px;
+    padding-right: 16px;
+    gap: 12px;
 
     .brand {
       white-space: nowrap;
@@ -376,29 +404,26 @@ html.dark {
       flex-shrink: 0;
       font-size: 11px;
     }
-    .spacer { flex: 1; }
-    .nav {
-      order: 3;
-      width: 100%;
-      overflow-x: auto;
+  }
+  /* iOS Safari 输入框字号 <16px 会自动放大页面且不还原，统一 16px（人生K线图同规矩） */
+  .el-input__inner,
+  .el-textarea__inner {
+    font-size: 16px !important;
+  }
+  /* 两列后卡片收紧：内边距与数字字号缩小一档 */
+  .stat-card {
+    padding: 14px 16px;
 
-      a {
-        white-space: nowrap;
-        padding: 6px 10px;
-      }
+    .value {
+      font-size: 20px;
+      margin-top: 6px;
+    }
+    .delta {
+      font-size: 12px;
     }
   }
-}
-
-.page {
-  padding: 28px 24px 60px;
-  max-width: 1440px;
-  margin: 0 auto;
-}
-
-@media (max-width: 640px) {
-  .page {
-    padding: 18px 14px 48px;
+  .panel {
+    padding: 16px;
   }
 }
 
